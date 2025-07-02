@@ -11,11 +11,13 @@ langchain-groq
 chromadb
 PyPDF2
 pdfplumber
-fitz
-dotenv
+PyMuPDF==1.22.5          
+python-dotenv            
 numpy
 tqdm
 langchain_ollama
 webdriver_manager
 sentence-transformers
 pypdf
+
+protobuf==3.20.3 
