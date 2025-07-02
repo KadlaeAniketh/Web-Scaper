@@ -17,18 +17,22 @@ from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_groq import ChatGroq
 from langchain_core.runnables.history import RunnableWithMessageHistory
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain.embeddings import HuggingFaceInferenceAPIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader
-from langchain.vectorstores import FAISS  # ✅ Use FAISS instead of Chroma
+from langchain.vectorstores import FAISS
 
 # Load environment variables
 load_dotenv()
-os.environ['HF_TOKEN'] = os.getenv("HF_TOKEN")
+HF_TOKEN = os.getenv("HF_TOKEN")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+embeddings = HuggingFaceInferenceAPIEmbeddings(
+    api_key=HF_TOKEN,
+    model_name="sentence-transformers/all-MiniLM-L6-v2"
+)
 
+# Streamlit UI
 st.title("🕸️ AI Web Scraper & RAG PDF Q&A App")
 st.write("Scrape a website or upload PDFs and ask questions about the content.")
 
@@ -76,7 +80,9 @@ elif choice == "Upload PDF":
     selected_model = st.sidebar.selectbox("Select Groq Model", models)
 
     if not GROQ_API_KEY:
-        st.error("❌ Set GROQ_API_KEY in your .env file")
+        st.error("❌ Set GROQ_API_KEY in your .env or Streamlit secrets")
+    elif not HF_TOKEN:
+        st.error("❌ Set HF_TOKEN in your .env or Streamlit secrets")
     else:
         llm = ChatGroq(groq_api_key=GROQ_API_KEY, model_name=selected_model)
         session_id = st.text_input("Session ID", "default_session")
@@ -97,7 +103,6 @@ elif choice == "Upload PDF":
             splitter = RecursiveCharacterTextSplitter(chunk_size=5000, chunk_overlap=500)
             splits = splitter.split_documents(docs)
 
-            # ✅ Use FAISS instead of Chroma
             vectorstore = FAISS.from_documents(splits, embedding=embeddings)
             retriever = vectorstore.as_retriever()
 
