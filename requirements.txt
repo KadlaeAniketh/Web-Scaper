@@ -18,3 +18,4 @@ PyMuPDF==1.22.5
 chromadb
 protobuf==3.20.3
 httpx
+langchain_community
