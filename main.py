@@ -12,7 +12,6 @@ from parse import parse_with_ollama
 
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain_chroma import Chroma
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -21,6 +20,7 @@ from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader
+from langchain.vectorstores import FAISS  # ✅ Use FAISS instead of Chroma
 
 # Load environment variables
 load_dotenv()
@@ -29,7 +29,6 @@ GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
-# Streamlit UI
 st.title("🕸️ AI Web Scraper & RAG PDF Q&A App")
 st.write("Scrape a website or upload PDFs and ask questions about the content.")
 
@@ -98,9 +97,8 @@ elif choice == "Upload PDF":
             splitter = RecursiveCharacterTextSplitter(chunk_size=5000, chunk_overlap=500)
             splits = splitter.split_documents(docs)
 
-            vectorstore = Chroma.from_documents(
-                documents=splits, embedding=embeddings, persist_directory="./chroma_db"
-            )
+            # ✅ Use FAISS instead of Chroma
+            vectorstore = FAISS.from_documents(splits, embedding=embeddings)
             retriever = vectorstore.as_retriever()
 
             contextualize_prompt = ChatPromptTemplate.from_messages([
