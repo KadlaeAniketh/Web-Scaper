@@ -8,7 +8,7 @@ from scrape import (
     clean_body_content,
     split_dom_content,
 )
-from parse_with_groq import parse_with_groq  # Updated function using Groq
+from parse_with_groq import parse_with_groq  # Uses Groq for DOM parsing
 
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
@@ -22,24 +22,24 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import FAISS
 
-# Load environment variables
+# --- Load environment variables ---
 load_dotenv()
 HF_TOKEN = os.getenv("HF_TOKEN")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
-# Initialize HuggingFace Embeddings
+# --- Initialize Embedding Model ---
 embeddings = HuggingFaceInferenceAPIEmbeddings(
     api_key=HF_TOKEN,
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
+    model_name="BAAI/bge-base-en-v1.5"  # Recommended production model
 )
 
-# Streamlit UI
+# --- Streamlit UI ---
 st.title("🕸️ AI Web Scraper & RAG PDF Q&A App")
 st.write("Scrape a website or upload PDFs and ask questions about the content.")
 
 choice = st.radio("Choose an action:", ["Scrape Website", "Upload PDF"])
 
-# --- Scrape Website ---
+# --- Scrape Website Section ---
 if choice == "Scrape Website":
     url = st.text_input("Enter the website URL")
     if st.button("Scrape Website"):
@@ -56,7 +56,7 @@ if choice == "Scrape Website":
             st.error(f"❌ Error scraping website: {e}")
 
     if "cleaned_content" in st.session_state:
-        parse_desc = st.text_area("Describe what to extract", value="Extract all titles or job listings")
+        parse_desc = st.text_area("Describe what to extract", value="Extract all job listings")
         if st.button("Parse Content") and parse_desc:
             st.write("🤖 Extracting information with Groq...")
             chunks = split_dom_content(st.session_state.cleaned_content)
@@ -72,7 +72,7 @@ if choice == "Scrape Website":
             except Exception as e:
                 st.error(f"❌ Parsing error: {e}")
 
-# --- Upload PDF and Ask Questions ---
+# --- Upload PDF Section ---
 elif choice == "Upload PDF":
     models = [
         "llama3-70b-8192",
