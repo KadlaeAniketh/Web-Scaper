@@ -8,12 +8,13 @@ langchain
 langchain-community
 langchain-core
 langchain-huggingface
+langchain-chroma
 langchain-groq
-langchain_ollama
 sentence-transformers
 PyPDF2
 pypdf
 pdfplumber
 PyMuPDF==1.22.5
+chromadb
 protobuf==3.20.3
-faiss-cpu
+httpx
