@@ -6,6 +6,7 @@ tqdm
 numpy
 langchain
 langchain-community
+faiss-cpu
 langchain-core
 langchain-huggingface
 langchain-chroma
