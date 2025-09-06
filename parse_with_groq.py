@@ -9,7 +9,7 @@ load_dotenv()
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 # Choose from: llama3-70b-8192, llama3-8b-8192, gemma-7b-it, etc.
-model = ChatGroq(model_name="llama3-8b-8192", groq_api_key=GROQ_API_KEY)
+model = ChatGroq(model_name="llama-3.1-8b-instant", groq_api_key=GROQ_API_KEY)
 
 template = (
     "You are tasked with extracting specific information from the following text content:\n\n{dom_content}\n\n"
@@ -32,3 +32,4 @@ def parse_with_groq(dom_chunks, parse_description):
         print(f"Parsed chunk {i}/{len(dom_chunks)}")
         results.append(response["text"])
     return "\n".join(results)
+
