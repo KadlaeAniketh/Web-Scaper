@@ -10,15 +10,12 @@ lxml
 selenium
 webdriver-manager
 
-# LangChain Core
-langchain
-langchain-core
-langchain-community
-langchain-text-splitters
-
-# LangChain Integrations
+# LangChain - UPDATED VERSIONS
+langchain>=0.1.0
+langchain-core>=0.1.0
+langchain-community>=0.0.20
+langchain-text-splitters>=0.0.1
 langchain-groq
-langchain-huggingface
 
 # Vector Stores
 faiss-cpu
@@ -26,6 +23,7 @@ chromadb
 
 # Embeddings & ML
 sentence-transformers
+huggingface-hub
 torch
 transformers
 
