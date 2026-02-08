@@ -20,11 +20,10 @@ except ImportError:
     st.warning("⚠️ Scraping modules not found. PDF Q&A only.")
 
 # ----------------------------- 
-# LangChain imports
+# LangChain imports - FIXED
 # ----------------------------- 
 from langchain_groq import ChatGroq
-from langchain.chains.history_aware_retriever import create_history_aware_retriever
-from langchain.chains.retrieval import create_retrieval_chain
+from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.chat_history import BaseChatMessageHistory
@@ -289,7 +288,7 @@ elif choice == "Upload PDF & Ask Questions":
                         )
                     
                     # ----------------------------- 
-                    # History-aware retriever
+                    # History-aware retriever - FIXED IMPORT
                     # ----------------------------- 
                     contextualize_prompt = ChatPromptTemplate.from_messages([
                         ("system", "Given a chat history and the latest user question, "
