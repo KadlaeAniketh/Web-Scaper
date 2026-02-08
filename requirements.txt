@@ -11,7 +11,7 @@ selenium
 webdriver-manager
 
 # LangChain - UPDATED VERSIONS
-langchain>=0.1.0
+langchain==0.0.245
 langchain-core>=0.1.0
 langchain-community>=0.0.20
 langchain-text-splitters>=0.0.1
@@ -37,3 +37,4 @@ PyMuPDF==1.22.5
 tqdm
 numpy
 protobuf==3.20.3
+
